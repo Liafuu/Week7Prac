@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      #Setup of environment for test
       - name: Checkout
         uses: actions/checkout@v4.2.2
 
