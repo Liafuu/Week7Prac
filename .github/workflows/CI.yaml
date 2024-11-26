@@ -1,1 +1,37 @@
+name: CI Process
+run-name: ${{ github.actor }} is learning GitHub Actions
 
+on: [push]
+
+jobs:
+  behave-testing:
+    #Setup of simple OS of choice. i.e. Linux
+    #create VM with ubuntu OS
+    runs-on: ubuntu-latest
+
+    steps:
+      #Setup of environment for test
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: List repo
+        run: 
+          ls
+      #Setup tools necessary for testing, search from marketplace
+      - name: Setup Python
+      uses: actions/setup-python@v5.3.0
+      with:
+        python-version: '3.9'
+        
+ - name: pip-install-package
+  # You may pin to the exact commit or the version.
+  # uses: durandtibo/pip-install-package-action@9bad1fbf91b61c40b8f555f0bb19f2e742a6f0b7
+  uses: durandtibo/pip-install-package-action@v0.3.1
+  with:
+    # The package name
+    package-name: 
+    # The package target version
+    package-version: 
+    # The python version
+    python-version: 
+          
