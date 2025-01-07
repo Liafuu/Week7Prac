@@ -32,3 +32,14 @@ jobs:
         uses: cryptic-wizard/run-behave-tests@v0.4.0
         with:
           test-output-name: results.xml
+
+      # Week13 - Step 6b: Send Telegram Message on failure 
+      - name: Send Telegram Message on Test Failure(s)
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.7507145474:AAFG9-5906ZTdBM0nes-ZDzIJu_EFfiQo3w }}
+          TELEGRAM_CHAT_ID: ${{ secrets.-1002343807317 }}
+        run: |
+          curl -X POST "https://api.telegram.org/bot${7507145474:AAFG9-5906ZTdBM0nes-ZDzIJu_EFfiQo3w}/sendMessage" \
+          -d chat_id="${-1002343807317}" \
+          -d text="Review failed run, fix the issue(s), and re-run until successful."  
