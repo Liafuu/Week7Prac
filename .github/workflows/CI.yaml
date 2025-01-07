@@ -3,43 +3,54 @@ run-name: ${{github.actor}} is learning Github Actions
 on: [push]
 jobs:
   behave-testing:
-    # Setup of simple OS of choice
-    # Create VM with ubuntu OS
+    # Setup a simple OS of choice, i.e., Linux
+    # Create VM with Ubuntu OS
     runs-on: ubuntu-latest
+    permissions:
+      issues: write  # Grant permissions to create issues
+      
     steps:
-    # Setup of environment for test
+      # Step 1: Checkout code from repository
       - name: Checkout
-        uses: actions/checkout@v4 
+        uses: actions/checkout@v4.2.2
+      - name: Create an issue
+        uses: dacbd/create-issue-action@main
+        with:
+          token: ${{ github.token }}
+          title: Simple test issue
+          body: my new issue
+
+      # Step 2: List files in the repository
       - name: List repo
         run: |
           ls
-          
-      # install python
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13' 
 
-      # install behave
-      - name: Setup Behave
-        uses: BSFishy/pip-action@v1
+      # Step 3: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5.3.0
         with:
-          packages: |
-            behave
+          python-version: '3.13'
 
-      # Run behave
-      - name: Run behave test
+      # Step 4: Install Behave using pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install behave==1.2.6  # Install Behave with a specific version (adjust version if needed)
+
+      # Step 5: Run Behave tests
+      - name: Run Behave tests
         uses: cryptic-wizard/run-behave-tests@v0.4.0
         with:
-          test-output-name: results.xml
-
-      # Week13 - Step 6b: Send Telegram Message on failure 
+          upload-artifact: true  # Default is true, adjust if needed
+          
+      # Step 6b: Send Telegram Message on failure 
       - name: Send Telegram Message on Test Failure(s)
         if: failure()
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.7507145474:AAFG9-5906ZTdBM0nes-ZDzIJu_EFfiQo3w }}
           TELEGRAM_CHAT_ID: ${{ secrets.-1002343807317 }}
         run: |
-          curl -X POST "https://api.telegram.org/bot${7507145474:AAFG9-5906ZTdBM0nes-ZDzIJu_EFfiQo3w}/sendMessage" \
-          -d chat_id="${-1002343807317}" \
-          -d text="Review failed run, fix the issue(s), and re-run until successful."  
+          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          -d text="Review failed run, fix the issue(s), and re-run until successful."
+          
