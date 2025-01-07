@@ -43,7 +43,7 @@ jobs:
         with:
           upload-artifact: true  # Default is true, adjust if needed
 
-      # Week13 - Step 6b: Send Telegram Message on failure 
+      # Step 6: Send Telegram Message on failure 
       - name: Send Telegram Message on Test Failure(s)
         if: failure()
         env:
@@ -53,3 +53,20 @@ jobs:
           curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
           -d chat_id="${TELEGRAM_CHAT_ID}" \
           -d text="Review failed run, fix the issue(s), and re-run until successful."
+
+      # Step 7: CD (Prepare files for delivery/deployment) - Xin Cheng
+      - name: Prepare files
+        run: |
+          mkdir -p release
+          cp -r ./calculator.py ./release/calculator-XinCheng.py
+          echo "Deployment files prepared."
+          ls -l ./release/
+
+      # Step 8: Upload files to AWS S3
+      - name: Upload to AWS S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-east-1"
+        run: |
+          aws s3 cp ./release s3://devops-calculator-app/release-files --recursive
