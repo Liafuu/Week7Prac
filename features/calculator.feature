@@ -3,7 +3,7 @@ Feature: Calculator
 
     Scenario: Addition
         Given Calculator initialized
-        When Add 10 and 5
+        When Add 10 and 2
         Then result is 15
 
     Scenario: Subtraction
