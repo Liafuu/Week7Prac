@@ -42,15 +42,3 @@ jobs:
         uses: cryptic-wizard/run-behave-tests@v0.4.0
         with:
           upload-artifact: true  # Default is true, adjust if needed
-          
-      # Step 6b: Send Telegram Message on failure 
-      - name: Send Telegram Message on Test Failure(s)
-        if: failure()
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.7507145474:AAFG9-5906ZTdBM0nes-ZDzIJu_EFfiQo3w }}
-          TELEGRAM_CHAT_ID: ${{ secrets.-1002343807317 }}
-        run: |
-          curl -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-          -d chat_id="${TELEGRAM_CHAT_ID}" \
-          -d text="Review failed run, fix the issue(s), and re-run until successful."
-          
